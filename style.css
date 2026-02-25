@@ -1,16 +1,39 @@
+/* Theme Variables */
+:root {
+    --bg-color: #f4f4f4;
+    --text-color: #333;
+    --header-bg: #fff;
+    --card-bg: #fff;
+    --nav-link-color: #555;
+    --footer-bg: #333;
+    --footer-text: #fff;
+}
+
+[data-theme="dark"] {
+    --bg-color: #1a1a1a;
+    --text-color: #f4f4f4;
+    --header-bg: #2d2d2d;
+    --card-bg: #2d2d2d;
+    --nav-link-color: #ccc;
+    --footer-bg: #000;
+    --footer-text: #ccc;
+}
+
 /* General Styles */
 body {
     font-family: sans-serif;
     margin: 0;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Header */
 header {
-    background-color: #fff;
+    background-color: var(--header-bg);
     padding: 1rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease;
 }
 
 nav {
@@ -23,7 +46,7 @@ nav {
     font-size: 1.5rem;
     font-weight: bold;
     text-decoration: none;
-    color: #333;
+    color: var(--text-color);
 }
 
 nav ul {
@@ -31,6 +54,7 @@ nav ul {
     margin: 0;
     padding: 0;
     display: flex;
+    align-items: center;
 }
 
 nav ul li {
@@ -39,8 +63,26 @@ nav ul li {
 
 nav ul li a {
     text-decoration: none;
-    color: #555;
+    color: var(--nav-link-color);
     font-weight: bold;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    background: none;
+    border: 2px solid var(--text-color);
+    color: var(--text-color);
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background-color: var(--text-color);
+    color: var(--bg-color);
 }
 
 /* Hero Section */
