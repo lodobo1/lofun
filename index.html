@@ -3,91 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>우리 동네 메이커스 | 주민 주도 지역 인프라 구축</title>
+    <title>우리 동네 메이커스 | NEXT-GEN INFRA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap');
-        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f8fafc; }
-        .brand-card:hover { transform: translateY(-5px); transition: 0.3s; }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap');
+        body { 
+            font-family: 'Noto Sans KR', sans-serif; 
+            background-color: #141414; 
+            color: #e5e5e5;
+            overflow-x: hidden;
+        }
+        .netflix-row::-webkit-scrollbar { display: none; }
+        .netflix-row { -ms-overflow-style: none; scrollbar-width: none; }
+        .card-hover:hover { 
+            transform: scale(1.1); 
+            z-index: 10;
+            transition: transform 0.3s ease;
+        }
+        .hero-gradient {
+            background: linear-gradient(to top, #141414 0%, rgba(20,20,20,0) 100%),
+                        linear-gradient(to right, #141414 0%, rgba(20,20,20,0) 60%);
+        }
     </style>
 </head>
-<body>
+<body class="pb-20">
 
-    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-blue-800">우리 동네 메이커스</h1>
-            <div class="flex items-center space-x-4">
-                <button onclick="showCart()" class="relative p-2 bg-gray-100 rounded-full">
-                    🛒 <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5">0</span>
-                </button>
-                <button class="bg-blue-600 text-white px-4 py-2 rounded font-bold">제안하기</button>
-            </div>
+    <!-- Header -->
+    <header id="main-header" class="fixed top-0 w-full z-50 transition-colors duration-300 px-4 py-3 flex justify-between items-center bg-transparent">
+        <div class="flex items-center space-x-8">
+            <h1 class="text-3xl font-black text-red-600 tracking-tighter cursor-pointer" onclick="location.reload()">MAKERS</h1>
+            <nav class="hidden md:flex space-x-6 text-sm font-medium">
+                <a href="#" class="hover:text-gray-300 transition">홈</a>
+                <a href="#" class="hover:text-gray-300 transition" onclick="showStats()">지역별/카테고리별 지지 현황</a>
+                <a href="#" class="hover:text-gray-300 transition">내가 제안한 브랜드</a>
+            </nav>
+        </div>
+        <div class="flex items-center space-x-6">
+            <button onclick="showCart()" class="relative p-2 hover:bg-white/10 rounded-full transition">
+                🛒 <span id="cart-count" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] rounded-full px-1.5 font-bold">0</span>
+            </button>
+            <div class="w-8 h-8 bg-blue-500 rounded cursor-pointer"></div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        <section class="mb-12 text-center">
-            <h2 class="text-3xl font-bold text-gray-800 mb-4">우리 동네에 들어왔으면 하는 브랜드를 펀딩하세요</h2>
-            <p class="text-gray-600 italic">"주민들의 목소리가 모이면 인프라가 됩니다."</p>
-        </section>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="brand-list">
+    <!-- Hero Section -->
+    <section class="relative h-[80vh] w-full overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
+             class="absolute inset-0 w-full h-full object-cover" alt="Hero Background">
+        <div class="absolute inset-0 hero-gradient"></div>
+        <div class="absolute inset-0 flex flex-col justify-center px-4 md:px-12 max-w-2xl space-y-4">
+            <h2 class="text-5xl md:text-7xl font-extrabold text-white">우리 동네의<br>내일을 결정하세요</h2>
+            <p class="text-lg md:text-xl text-gray-200 shadow-sm">
+                주민들의 목소리가 모여 우리 동네의 새로운 랜드마크가 탄생합니다. 지금 가장 핫한 제안에 참여하세요.
+            </p>
+            <div class="flex space-x-3 pt-4">
+                <button class="bg-white text-black px-8 py-2 rounded font-bold flex items-center space-x-2 hover:bg-gray-200 transition">
+                    <span>▶︎</span> <span>지금 제안하기</span>
+                </button>
+                <button class="bg-gray-500/50 text-white px-8 py-2 rounded font-bold flex items-center space-x-2 hover:bg-gray-500/70 transition">
+                    <span>ⓘ</span> <span>상세 정보</span>
+                </button>
             </div>
+        </div>
+    </section>
+
+    <!-- Brand Rows -->
+    <main class="mt-[-100px] relative z-10 px-4 md:px-12 space-y-12">
+        <div>
+            <h3 class="text-xl font-bold mb-4">현재 가장 인기 있는 브랜드</h3>
+            <div class="flex overflow-x-auto space-x-4 pb-8 netflix-row" id="popular-brands"></div>
+        </div>
+
+        <div>
+            <h3 class="text-xl font-bold mb-4">문화/생활 밀착형 인프라</h3>
+            <div class="flex overflow-x-auto space-x-4 pb-8 netflix-row" id="culture-brands"></div>
+        </div>
     </main>
 
-    <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-[100]">
-        <div class="bg-white p-8 rounded-lg max-w-md w-full">
-            <h3 class="text-xl font-bold mb-4 border-b pb-2">나의 펀딩 리스트</h3>
-            <ul id="cart-items" class="mb-6 space-y-2"></ul>
-            <div class="flex justify-between font-bold text-lg mb-6">
-                <span>총 참여 예정 금액:</span>
-                <span id="total-price">0원</span>
+    <!-- Support Stats Modal -->
+    <div id="stats-modal" class="fixed inset-0 bg-black/90 hidden flex items-center justify-center z-[100] p-4">
+        <div class="bg-[#181818] p-8 rounded-lg max-w-4xl w-full border border-gray-800 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-3xl font-bold">전국 지지표 집계 현황</h3>
+                <button onclick="hideStats()" class="text-3xl">&times;</button>
             </div>
-            <div class="flex space-x-2">
-                <button onclick="hideCart()" class="flex-1 py-3 bg-gray-200 rounded">닫기</button>
-                <button onclick="confirmFunding()" class="flex-1 py-3 bg-blue-600 text-white rounded font-bold">펀딩 참여 확정</button>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Category Stats -->
+                <div>
+                    <h4 class="text-xl font-bold mb-6 text-red-500">카테고리별 지지율</h4>
+                    <div class="space-y-6" id="category-stats"></div>
+                </div>
+                <!-- Region Stats -->
+                <div>
+                    <h4 class="text-xl font-bold mb-6 text-blue-500">지역별 활성도</h4>
+                    <div class="space-y-6" id="region-stats"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Funding Cart Modal -->
+    <div id="cart-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-[100]">
+        <div class="bg-[#181818] p-8 rounded-lg max-w-md w-full border border-gray-700">
+            <h3 class="text-xl font-bold mb-4 border-b border-gray-700 pb-2 text-white">나의 펀딩 리스트</h3>
+            <ul id="cart-items" class="mb-6 space-y-4 text-gray-300"></ul>
+            <div class="flex justify-between font-bold text-lg mb-8 border-t border-gray-700 pt-4">
+                <span>총 참여 예정 금액:</span>
+                <span id="total-price" class="text-red-500">0원</span>
+            </div>
+            <div class="flex space-x-3">
+                <button onclick="hideCart()" class="flex-1 py-3 bg-gray-700 rounded font-bold hover:bg-gray-600 transition">닫기</button>
+                <button onclick="confirmFunding()" class="flex-1 py-3 bg-red-600 text-white rounded font-bold hover:bg-red-700 transition">펀딩 참여 확정</button>
             </div>
         </div>
     </div>
 
     <script>
-        // 초기 브랜드 데이터 (사례 기반)
         const brands = [
-            { id: 1, name: '스타벅스', category: '카페/인프라', goal: '1,000명', price: 10000, img: '☕' },
-            { id: 2, name: 'CGV 영화관', category: '문화/취미', goal: '3,000명', price: 30000, img: '🎬' },
-            { id: 3, name: '주민 공동 육아센터', category: '공공시설', goal: '500명', price: 50000, img: '👶' },
-            { id: 4, name: '이마트 트레이더스', category: '유통/쇼핑', goal: '5,000명', price: 20000, img: '🛒' },
-            { id: 5, name: '동네 공유 오피스', category: '비즈니스', goal: '200명', price: 15000, img: '💻' }
+            { id: 1, name: '스타벅스', category: '카페/인프라', goal: '1,000명', price: 10000, img: '☕', hot: true },
+            { id: 2, name: 'CGV 영화관', category: '문화/취미', goal: '3,000명', price: 30000, img: '🎬', hot: true },
+            { id: 3, name: '주민 공동 육아센터', category: '공공시설', goal: '500명', price: 50000, img: '👶', hot: false },
+            { id: 4, name: '이마트 트레이더스', category: '유통/쇼핑', goal: '5,000명', price: 20000, img: '🛒', hot: true },
+            { id: 5, name: '공유 오피스', category: '비즈니스', goal: '200명', price: 15000, img: '💻', hot: false },
+            { id: 6, name: '테슬라 슈퍼차저', category: '카페/인프라', goal: '100명', price: 5000, img: '⚡', hot: true },
+            { id: 7, name: '다이소', category: '유통/쇼핑', goal: '1,500명', price: 5000, img: '🛍️', hot: false }
         ];
+
+        const stats = {
+            categories: [
+                { name: '카페/인프라', votes: 12450, color: 'bg-red-600' },
+                { name: '문화/취미', votes: 8900, color: 'bg-orange-500' },
+                { name: '유통/쇼핑', votes: 15600, color: 'bg-green-500' },
+                { name: '공공시설', votes: 4200, color: 'bg-blue-500' }
+            ],
+            regions: [
+                { name: '서울 서초구', votes: 4500, active: 92 },
+                { name: '경기 판교', votes: 3800, active: 85 },
+                { name: '부산 해운대', votes: 2900, active: 78 },
+                { name: '대구 수성구', votes: 2100, active: 65 }
+            ]
+        };
 
         let cart = [];
 
-        // 브랜드 카드 렌더링
-        function renderBrands() {
-            const list = document.getElementById('brand-list');
-            list.innerHTML = brands.map(brand => `
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 brand-card">
-                    <div class="text-4xl mb-4">${brand.img}</div>
-                    <span class="text-xs font-bold text-blue-500 uppercase">${brand.category}</span>
-                    <h3 class="text-xl font-bold text-gray-800 mt-1">${brand.name}</h3>
-                    <p class="text-sm text-gray-500 mt-2">목표 인원: ${brand.goal}</p>
-                    <div class="mt-6 flex justify-between items-center">
-                        <span class="font-bold text-lg">${brand.price.toLocaleString()}원~</span>
-                        <button onclick="addToCart(${brand.id})" class="bg-gray-800 text-white px-4 py-2 rounded text-sm hover:bg-blue-600 transition">장바구니 담기</button>
+        function renderRows() {
+            const popularRow = document.getElementById('popular-brands');
+            const cultureRow = document.getElementById('culture-brands');
+
+            const makeCard = (brand) => `
+                <div class="flex-none w-[200px] md:w-[280px] bg-[#2f2f2f] rounded-md overflow-hidden card-hover cursor-pointer shadow-lg">
+                    <div class="h-32 md:h-40 bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-5xl">
+                        ${brand.img}
+                    </div>
+                    <div class="p-4 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-bold text-green-400 uppercase tracking-widest">${brand.category}</span>
+                            ${brand.hot ? '<span class="text-[10px] bg-red-600 px-1 rounded font-bold">HOT</span>' : ''}
+                        </div>
+                        <h4 class="font-bold text-lg">${brand.name}</h4>
+                        <p class="text-xs text-gray-400">목표: ${brand.goal}</p>
+                        <button onclick="addToCart(${brand.id})" class="w-full mt-4 py-2 bg-white text-black text-xs font-bold rounded hover:bg-gray-200 transition">펀딩 리스트에 추가</button>
+                    </div>
+                </div>
+            `;
+
+            popularRow.innerHTML = brands.filter(b => b.hot).map(makeCard).join('');
+            cultureRow.innerHTML = brands.filter(b => !b.hot || b.id > 4).map(makeCard).join('');
+        }
+
+        function showStats() {
+            document.getElementById('stats-modal').classList.remove('hidden');
+            const catContainer = document.getElementById('category-stats');
+            const regContainer = document.getElementById('region-stats');
+
+            const maxVotes = Math.max(...stats.categories.map(c => c.votes));
+            catContainer.innerHTML = stats.categories.map(c => `
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span>${c.name}</span>
+                        <span class="font-bold">${c.votes.toLocaleString()}표</span>
+                    </div>
+                    <div class="w-full bg-gray-800 rounded-full h-2">
+                        <div class="${c.color} h-2 rounded-full" style="width: ${(c.votes/maxVotes)*100}%"></div>
+                    </div>
+                </div>
+            `).join('');
+
+            regContainer.innerHTML = stats.regions.map(r => `
+                <div class="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg">
+                    <div>
+                        <p class="font-bold text-lg">${r.name}</p>
+                        <p class="text-xs text-gray-400">활성 제안 ${r.votes}개</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-2xl font-black text-blue-500">${r.active}%</p>
+                        <p class="text-[10px] uppercase text-gray-500">참여 지수</p>
                     </div>
                 </div>
             `).join('');
         }
 
-        // 장바구니 담기 기능
+        function hideStats() { document.getElementById('stats-modal').classList.add('hidden'); }
+
         function addToCart(id) {
             const brand = brands.find(b => b.id === id);
             if (!cart.find(item => item.id === id)) {
                 cart.push(brand);
                 updateUI();
-                alert(`${brand.name}이(가) 펀딩 리스트에 추가되었습니다.`);
+                alert(`${brand.name}이(가) 추가되었습니다!`);
             } else {
-                alert('이미 리스트에 포함된 브랜드입니다.');
+                alert('이미 리스트에 있습니다.');
             }
         }
 
@@ -95,9 +221,12 @@
             document.getElementById('cart-count').innerText = cart.length;
             const cartItems = document.getElementById('cart-items');
             cartItems.innerHTML = cart.map(item => `
-                <li class="flex justify-between items-center py-2 border-b">
-                    <span>${item.name}</span>
-                    <span class="font-bold">${item.price.toLocaleString()}원</span>
+                <li class="flex justify-between items-center bg-gray-800/50 p-3 rounded">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-xl">${item.img}</span>
+                        <span class="font-medium text-sm">${item.name}</span>
+                    </div>
+                    <span class="font-bold text-red-500 text-sm">${item.price.toLocaleString()}원</span>
                 </li>
             `).join('');
             
@@ -116,7 +245,18 @@
             hideCart();
         }
 
-        renderBrands();
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('main-header');
+            if (window.scrollY > 50) {
+                header.classList.add('bg-[#141414]');
+                header.classList.remove('bg-transparent');
+            } else {
+                header.classList.add('bg-transparent');
+                header.classList.remove('bg-[#141414]');
+            }
+        });
+
+        renderRows();
     </script>
 </body>
 </html>
