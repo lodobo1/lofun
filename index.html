@@ -40,8 +40,8 @@
             </nav>
         </div>
         <div class="flex items-center space-x-6">
-            <button onclick="showCart()" class="relative p-2 hover:bg-white/10 rounded-full transition">
-                🛒 <span id="cart-count" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] rounded-full px-1.5 font-bold">0</span>
+            <button onclick="showSupportList()" class="relative p-2 hover:bg-white/10 rounded-full transition">
+                ✅ <span id="support-count" class="absolute -top-1 -right-1 bg-sky-500 text-white text-[10px] rounded-full px-1.5 font-bold">0</span>
             </button>
             <div class="w-8 h-8 bg-sky-400 rounded cursor-pointer"></div>
         </div>
@@ -152,18 +152,14 @@
         </div>
     </div>
 
-    <!-- Funding Cart Modal -->
-    <div id="cart-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-[100]">
+    <!-- Support List Modal -->
+    <div id="support-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-[100]">
         <div class="bg-[#181818] p-8 rounded-lg max-w-md w-full border border-gray-700">
-            <h3 class="text-xl font-bold mb-4 border-b border-gray-700 pb-2 text-white">나의 펀딩 리스트</h3>
-            <ul id="cart-items" class="mb-6 space-y-4 text-gray-300"></ul>
-            <div class="flex justify-between font-bold text-lg mb-8 border-t border-gray-700 pt-4">
-                <span>총 참여 예정 금액:</span>
-                <span id="total-price" class="text-sky-400">0원</span>
-            </div>
+            <h3 class="text-xl font-bold mb-4 border-b border-gray-700 pb-2 text-white">나의 지지 리스트</h3>
+            <ul id="support-items" class="mb-6 space-y-4 text-gray-300"></ul>
             <div class="flex space-x-3">
-                <button onclick="hideCart()" class="flex-1 py-3 bg-gray-700 rounded font-bold hover:bg-gray-600 transition">닫기</button>
-                <button onclick="confirmFunding()" class="flex-1 py-3 bg-sky-600 text-white rounded font-bold hover:bg-sky-700 transition">참여 확정</button>
+                <button onclick="hideSupportList()" class="flex-1 py-3 bg-gray-700 rounded font-bold hover:bg-gray-600 transition">닫기</button>
+                <button onclick="confirmSupport()" class="flex-1 py-3 bg-sky-600 text-white rounded font-bold hover:bg-sky-700 transition">지지 확정</button>
             </div>
         </div>
     </div>
@@ -171,76 +167,76 @@
     <script>
         const brands = [
             // 푸드 브랜드 (10)
-            { id: 101, name: '파이브가이즈', category: '해외 푸드', goal: '2,500명', price: 25000, img: '🍔', type: 'food' },
-            { id: 102, name: '쉐이크쉑', category: '해외 푸드', goal: '2,000명', price: 18000, img: '🍟', type: 'food' },
-            { id: 103, name: '빕스', category: '국내 푸드', goal: '1,500명', price: 45000, img: '🥩', type: 'food' },
-            { id: 104, name: '아웃백', category: '해외 푸드', goal: '1,800명', price: 50000, img: '🍖', type: 'food' },
-            { id: 105, name: '딤타오', category: '국내 푸드', goal: '800명', price: 30000, img: '🥟', type: 'food' },
-            { id: 106, name: '한와담', category: '국내 푸드', goal: '600명', price: 60000, img: '🍲', type: 'food' },
-            { id: 107, name: '토끼정', category: '국내 푸드', goal: '1,200명', price: 20000, img: '🍛', type: 'food' },
-            { id: 108, name: '연돈볼카츠', category: '국내 푸드', goal: '3,000명', price: 5000, img: '🧆', type: 'food' },
-            { id: 109, name: '서가앤쿡', category: '국내 푸드', goal: '1,000명', price: 25000, img: '🍳', type: 'food' },
-            { id: 110, name: '온더보더', category: '해외 푸드', goal: '1,500명', price: 35000, img: '🌮', type: 'food' },
+            { id: 101, name: '파이브가이즈', category: '해외 푸드', goal: '2,500명', img: '🍔', type: 'food' },
+            { id: 102, name: '쉐이크쉑', category: '해외 푸드', goal: '2,000명', img: '🍟', type: 'food' },
+            { id: 103, name: '빕스', category: '국내 푸드', goal: '1,500명', img: '🥩', type: 'food' },
+            { id: 104, name: '아웃백', category: '해외 푸드', goal: '1,800명', img: '🍖', type: 'food' },
+            { id: 105, name: '딤타오', category: '국내 푸드', goal: '800명', img: '🥟', type: 'food' },
+            { id: 106, name: '한와담', category: '국내 푸드', goal: '600명', img: '🍲', type: 'food' },
+            { id: 107, name: '토끼정', category: '국내 푸드', goal: '1,200명', img: '🍛', type: 'food' },
+            { id: 108, name: '연돈볼카츠', category: '국내 푸드', goal: '3,000명', img: '🧆', type: 'food' },
+            { id: 109, name: '서가앤쿡', category: '국내 푸드', goal: '1,000명', img: '🍳', type: 'food' },
+            { id: 110, name: '온더보더', category: '해외 푸드', goal: '1,500명', img: '🌮', type: 'food' },
 
             // 카페 브랜드 (10)
-            { id: 201, name: '스타벅스', category: '해외 카페', goal: '5,000명', price: 10000, img: '☕', type: 'cafe' },
-            { id: 202, name: '블루보틀', category: '해외 카페', goal: '1,500명', price: 12000, img: '🥛', type: 'cafe' },
-            { id: 203, name: '투썸플레이스', category: '국내 카페', goal: '2,000명', price: 15000, img: '🍰', type: 'cafe' },
-            { id: 204, name: '폴바셋', category: '국내 카페', goal: '1,200명', price: 10000, img: '🍦', type: 'cafe' },
-            { id: 205, name: '테라로사', category: '국내 카페', goal: '1,000명', price: 15000, img: '🍞', type: 'cafe' },
-            { id: 206, name: '런던베이글뮤지엄', category: '국내 카페', goal: '3,000명', price: 12000, img: '🥯', type: 'cafe' },
-            { id: 207, name: '팀홀튼', category: '해외 카페', goal: '1,800명', price: 8000, img: '🍩', type: 'cafe' },
-            { id: 208, name: '응커피 (% Arabica)', category: '해외 카페', goal: '1,000명', price: 10000, img: '🥤', type: 'cafe' },
-            { id: 209, name: '이디야', category: '국내 카페', goal: '4,000명', price: 5000, img: '🧊', type: 'cafe' },
-            { id: 210, name: '빽다방', category: '국내 카페', goal: '5,000명', price: 3000, img: '🧃', type: 'cafe' },
+            { id: 201, name: '스타벅스', category: '해외 카페', goal: '5,000명', img: '☕', type: 'cafe' },
+            { id: 202, name: '블루보틀', category: '해외 카페', goal: '1,500명', img: '🥛', type: 'cafe' },
+            { id: 203, name: '투썸플레이스', category: '국내 카페', goal: '2,000명', img: '🍰', type: 'cafe' },
+            { id: 204, name: '폴바셋', category: '국내 카페', goal: '1,200명', img: '🍦', type: 'cafe' },
+            { id: 205, name: '테라로사', category: '국내 카페', goal: '1,000명', img: '🍞', type: 'cafe' },
+            { id: 206, name: '런던베이글뮤지엄', category: '국내 카페', goal: '3,000명', img: '🥯', type: 'cafe' },
+            { id: 207, name: '팀홀튼', category: '해외 카페', goal: '1,800명', img: '🍩', type: 'cafe' },
+            { id: 208, name: '응커피 (% Arabica)', category: '해외 카페', goal: '1,000명', img: '🥤', type: 'cafe' },
+            { id: 209, name: '이디야', category: '국내 카페', goal: '4,000명', img: '🧊', type: 'cafe' },
+            { id: 210, name: '빽다방', category: '국내 카페', goal: '5,000명', img: '🧃', type: 'cafe' },
 
             // 브랜드/시설 (10)
-            { id: 301, name: 'CGV', category: '영화관', goal: '3,000명', price: 30000, img: '🎬', type: 'culture' },
-            { id: 302, name: '메가박스', category: '영화관', goal: '2,500명', price: 28000, img: '🍿', type: 'culture' },
-            { id: 303, name: '교보문고', category: '대형서점', goal: '1,500명', price: 20000, img: '📚', type: 'culture' },
-            { id: 304, name: '아크앤북', category: '라이프스타일 서점', goal: '800명', price: 15000, img: '📖', type: 'culture' },
-            { id: 305, name: '영풍문고', category: '대형서점', goal: '1,200명', price: 18000, img: '📒', type: 'culture' },
-            { id: 306, name: '현대카드 뮤직라이브러리', category: '문화공간', goal: '500명', price: 10000, img: '🎵', type: 'culture' },
-            { id: 307, name: '원더박스', category: '테마파크', goal: '1,000명', price: 40000, img: '🎡', type: 'culture' },
-            { id: 308, name: '잭슨나인스', category: '패밀리파크', goal: '1,200명', price: 25000, img: '🦖', type: 'culture' },
-            { id: 309, name: '고고랜드', category: '롤러스케이트', goal: '600명', price: 15000, img: '🛼', type: 'culture' },
-            { id: 310, name: '릴리펏', category: '키즈카페', goal: '800명', price: 20000, img: '🎠', type: 'culture' },
+            { id: 301, name: 'CGV', category: '영화관', goal: '3,000명', img: '🎬', type: 'culture' },
+            { id: 302, name: '메가박스', category: '영화관', goal: '2,500명', img: '🍿', type: 'culture' },
+            { id: 303, name: '교보문고', category: '대형서점', goal: '1,500명', img: '📚', type: 'culture' },
+            { id: 304, name: '아크앤북', category: '라이프스타일 서점', goal: '800명', img: '📖', type: 'culture' },
+            { id: 305, name: '영풍문고', category: '대형서점', goal: '1,200명', img: '📒', type: 'culture' },
+            { id: 306, name: '현대카드 뮤직라이브러리', category: '문화공간', goal: '500명', img: '🎵', type: 'culture' },
+            { id: 307, name: '원더박스', category: '테마파크', goal: '1,000명', img: '🎡', type: 'culture' },
+            { id: 308, name: '잭슨나인스', category: '패밀리파크', goal: '1,200명', img: '🦖', type: 'culture' },
+            { id: 309, name: '고고랜드', category: '롤러스케이트', goal: '600명', img: '🛼', type: 'culture' },
+            { id: 310, name: '릴리펏', category: '키즈카페', goal: '800명', img: '🎠', type: 'culture' },
 
             // MZ세대/여성 선호 (10)
-            { id: 401, name: '무신사 스탠다드', category: '패션/스토어', goal: '3,000명', price: 15000, img: '👕', type: 'fashion' },
-            { id: 402, name: '29CM', category: '편집숍', goal: '1,500명', price: 20000, img: '🏢', type: 'fashion' },
-            { id: 403, name: 'W컨셉', category: '편집숍', goal: '1,200명', price: 25000, img: '👗', type: 'fashion' },
-            { id: 404, name: '더현대 서울', category: '복합쇼핑몰', goal: '5,000명', price: 10000, img: '🏙️', type: 'fashion' },
-            { id: 405, name: '젠틀몬스터', category: '아이웨어', goal: '1,000명', price: 50000, img: '🕶️', type: 'fashion' },
-            { id: 406, name: '탬버린즈', category: '뷰티', goal: '1,200명', price: 30000, img: '🕯️', type: 'fashion' },
-            { id: 407, name: '에이랜드', category: '편집숍', goal: '1,000명', price: 15000, img: '🧥', type: 'fashion' },
-            { id: 408, name: '스타일나난다', category: '패션/뷰티', goal: '800명', price: 20000, img: '💄', type: 'fashion' },
-            { id: 409, name: '마뗑킴', category: '디자이너 브랜드', goal: '1,000명', price: 40000, img: '👜', type: 'fashion' },
-            { id: 410, name: '아더에러', category: '디자이너 브랜드', goal: '700명', price: 60000, img: '🧢', type: 'fashion' },
+            { id: 401, name: '무신사 스탠다드', category: '패션/스토어', goal: '3,000명', img: '👕', type: 'fashion' },
+            { id: 402, name: '29CM', category: '편집숍', goal: '1,500명', img: '🏢', type: 'fashion' },
+            { id: 403, name: 'W컨셉', category: '편집숍', goal: '1,200명', img: '👗', type: 'fashion' },
+            { id: 404, name: '더현대 서울', category: '복합쇼핑몰', goal: '5,000명', img: '🏙️', type: 'fashion' },
+            { id: 405, name: '젠틀몬스터', category: '아이웨어', goal: '1,000명', img: '🕶️', type: 'fashion' },
+            { id: 406, name: '탬버린즈', category: '뷰티', goal: '1,200명', img: '🕯️', type: 'fashion' },
+            { id: 407, name: '에이랜드', category: '편집숍', goal: '1,000명', img: '🧥', type: 'fashion' },
+            { id: 408, name: '스타일나난다', category: '패션/뷰티', goal: '800명', img: '💄', type: 'fashion' },
+            { id: 409, name: '마뗑킴', category: '디자이너 브랜드', goal: '1,000명', img: '👜', type: 'fashion' },
+            { id: 410, name: '아더에러', category: '디자이너 브랜드', goal: '700명', img: '🧢', type: 'fashion' },
 
             // 가족/중장년 선호 (10)
-            { id: 501, name: '신세계 스타필드', category: '복합쇼핑몰', goal: '8,000명', price: 10000, img: '🏗️', type: 'shopping' },
-            { id: 502, name: '롯데 프리미엄 아울렛', category: '아울렛', goal: '5,000명', price: 10000, img: '🏬', type: 'shopping' },
-            { id: 503, name: '현대 시티 아울렛', category: '아울렛', goal: '4,000명', price: 10000, img: '🏭', type: 'shopping' },
-            { id: 504, name: '자라 (ZARA)', category: '글로벌 패션', goal: '3,000명', price: 20000, img: '🧥', type: 'shopping' },
-            { id: 505, name: '유니클로', category: '글로벌 패션', goal: '4,000명', price: 15000, img: '👕', type: 'shopping' },
-            { id: 506, name: '코스 (COS)', category: '미니멀 패션', goal: '1,500명', price: 40000, img: '👚', type: 'shopping' },
-            { id: 507, name: '마시모두띠', category: '프리미엄 패션', goal: '1,000명', price: 50000, img: '🕴️', type: 'shopping' },
-            { id: 508, name: 'LF몰', category: '편집숍', goal: '1,200명', price: 30000, img: '💼', type: 'shopping' },
-            { id: 509, name: '한섬', category: '프리미엄 패션', goal: '800명', price: 80000, img: '✨', type: 'shopping' },
-            { id: 510, name: '탑텐', category: '국산 SPA', goal: '3,000명', price: 10000, img: '👕', type: 'shopping' },
+            { id: 501, name: '신세계 스타필드', category: '복합쇼핑몰', goal: '8,000명', img: '🏗️', type: 'shopping' },
+            { id: 502, name: '롯데 프리미엄 아울렛', category: '아울렛', goal: '5,000명', img: '🏬', type: 'shopping' },
+            { id: 503, name: '현대 시티 아울렛', category: '아울렛', goal: '4,000명', img: '🏭', type: 'shopping' },
+            { id: 504, name: '자라 (ZARA)', category: '글로벌 패션', goal: '3,000명', img: '🧥', type: 'shopping' },
+            { id: 505, name: '유니클로', category: '글로벌 패션', goal: '4,000명', img: '👕', type: 'shopping' },
+            { id: 506, name: '코스 (COS)', category: '미니멀 패션', goal: '1,500명', img: '👚', type: 'shopping' },
+            { id: 507, name: '마시모두띠', category: '프리미엄 패션', goal: '1,000명', img: '🕴️', type: 'shopping' },
+            { id: 508, name: 'LF몰', category: '편집숍', goal: '1,200명', img: '💼', type: 'shopping' },
+            { id: 509, name: '한섬', category: '프리미엄 패션', goal: '800명', img: '✨', type: 'shopping' },
+            { id: 510, name: '탑텐', category: '국산 SPA', goal: '3,000명', img: '👕', type: 'shopping' },
 
             // 스포츠/피트니스 (10)
-            { id: 601, name: '고투피트니스', category: '대형 헬스', goal: '2,000명', price: 10000, img: '🏋️', type: 'sports' },
-            { id: 602, name: '짐박스', category: '피트니스', goal: '1,500명', price: 15000, img: '💪', type: 'sports' },
-            { id: 603, name: '필라테스 더 밸런스', category: '필라테스', goal: '500명', price: 40000, img: '🧘', type: 'sports' },
-            { id: 604, name: '파크골프장', category: '야외 스포츠', goal: '1,000명', price: 5000, img: '⛳', type: 'sports' },
-            { id: 605, name: '실내 스쿼시 경기장', category: '라켓 스포츠', goal: '400명', price: 15000, img: '🎾', type: 'sports' },
-            { id: 606, name: '공공 스포츠 센터', category: '복합시설', goal: '5,000명', price: 5000, img: '🏊', type: 'sports' },
-            { id: 607, name: '크로스핏 박스', category: '고강도 운동', goal: '300명', price: 20000, img: '🔩', type: 'sports' },
-            { id: 608, name: '테니스 파크', category: '실내외 테니스', goal: '800명', price: 20000, img: '🎾', type: 'sports' },
-            { id: 609, name: '볼링 센터', category: '레저/스포츠', goal: '1,000명', price: 10000, img: '🎳', type: 'sports' },
-            { id: 610, name: '클라이밍 짐', category: '실내 암벽등반', goal: '600명', price: 15000, img: '🧗', type: 'sports' }
+            { id: 601, name: '고투피트니스', category: '대형 헬스', goal: '2,000명', img: '🏋️', type: 'sports' },
+            { id: 602, name: '짐박스', category: '피트니스', goal: '1,500명', img: '💪', type: 'sports' },
+            { id: 603, name: '필라테스 더 밸런스', category: '필라테스', goal: '500명', img: '🧘', type: 'sports' },
+            { id: 604, name: '파크골프장', category: '야외 스포츠', goal: '1,000명', img: '⛳', type: 'sports' },
+            { id: 605, name: '실내 스쿼시 경기장', category: '라켓 스포츠', goal: '400명', img: '🎾', type: 'sports' },
+            { id: 606, name: '공공 스포츠 센터', category: '복합시설', goal: '5,000명', img: '🏊', type: 'sports' },
+            { id: 607, name: '크로스핏 박스', category: '고강도 운동', goal: '300명', img: '🔩', type: 'sports' },
+            { id: 608, name: '테니스 파크', category: '실내외 테니스', goal: '800명', img: '🎾', type: 'sports' },
+            { id: 609, name: '볼링 센터', category: '레저/스포츠', goal: '1,000명', img: '🎳', type: 'sports' },
+            { id: 610, name: '클라이밍 짐', category: '실내 암벽등반', goal: '600명', img: '🧗', type: 'sports' }
         ];
 
         const stats = {
@@ -258,7 +254,7 @@
             ]
         };
 
-        let cart = [];
+        let supportList = [];
 
         function renderRows() {
             const sections = ['food', 'cafe', 'culture', 'fashion', 'shopping', 'sports'];
@@ -283,12 +279,9 @@
                             <span class="text-[9px] bg-white/10 px-1 rounded font-bold text-gray-300">목표:${brand.goal}</span>
                         </div>
                         <h4 class="font-bold text-base truncate">${brand.name}</h4>
-                        <div class="flex justify-between items-center mt-3">
-                            <span class="text-xs font-bold text-white">${brand.price.toLocaleString()}원~</span>
-                            <button onclick="addToCart(${brand.id})" class="p-1.5 bg-white text-black rounded-full hover:bg-sky-400 hover:text-white transition">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" />
-                                </svg>
+                        <div class="flex justify-center items-center mt-3">
+                            <button onclick="toggleSupport(${brand.id})" class="w-full py-2 bg-white text-black text-sm font-bold rounded-md hover:bg-sky-400 hover:text-white transition">
+                                지지하기
                             </button>
                         </div>
                     </div>
@@ -330,10 +323,10 @@
 
         function hideStats() { document.getElementById('stats-modal').classList.add('hidden'); }
 
-        function addToCart(id) {
+        function toggleSupport(id) {
             const brand = brands.find(b => b.id === id);
-            if (!cart.find(item => item.id === id)) {
-                cart.push(brand);
+            if (!supportList.find(item => item.id === id)) {
+                supportList.push(brand);
                 updateUI();
                 const notification = document.createElement('div');
                 notification.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 bg-sky-500 text-white px-6 py-3 rounded-full font-bold shadow-2xl z-[200] animate-bounce';
@@ -341,14 +334,14 @@
                 document.body.appendChild(notification);
                 setTimeout(() => notification.remove(), 2000);
             } else {
-                alert('이미 리스트에 있습니다.');
+                alert('이미 지지 리스트에 있습니다.');
             }
         }
 
         function updateUI() {
-            document.getElementById('cart-count').innerText = cart.length;
-            const cartItems = document.getElementById('cart-items');
-            cartItems.innerHTML = cart.map(item => `
+            document.getElementById('support-count').innerText = supportList.length;
+            const supportItems = document.getElementById('support-items');
+            supportItems.innerHTML = supportList.map(item => `
                 <li class="flex justify-between items-center bg-white/5 p-3 rounded border border-white/10">
                     <div class="flex items-center space-x-3">
                         <span class="text-xl">${item.img}</span>
@@ -357,23 +350,25 @@
                             <p class="text-[9px] text-gray-500 uppercase">${item.category}</p>
                         </div>
                     </div>
-                    <span class="font-bold text-sky-400 text-sm">${item.price.toLocaleString()}원</span>
+                    <button onclick="removeSupport(${item.id})" class="text-red-500 text-xs font-bold hover:text-red-400">취소</button>
                 </li>
             `).join('');
-            
-            const total = cart.reduce((sum, item) => sum + item.price, 0);
-            document.getElementById('total-price').innerText = total.toLocaleString() + '원';
         }
 
-        function showCart() { document.getElementById('cart-modal').classList.remove('hidden'); }
-        function hideCart() { document.getElementById('cart-modal').classList.add('hidden'); }
-
-        function confirmFunding() {
-            if (cart.length === 0) return alert('담긴 브랜드가 없습니다.');
-            alert('참여해주셔서 감사합니다! 주민들의 뜻을 모아 유치를 추진하겠습니다.');
-            cart = [];
+        function removeSupport(id) {
+            supportList = supportList.filter(item => item.id !== id);
             updateUI();
-            hideCart();
+        }
+
+        function showSupportList() { document.getElementById('support-modal').classList.remove('hidden'); }
+        function hideSupportList() { document.getElementById('support-modal').classList.add('hidden'); }
+
+        function confirmSupport() {
+            if (supportList.length === 0) return alert('지지한 브랜드가 없습니다.');
+            alert('참여해주셔서 감사합니다! 주민들의 뜻을 모아 유치를 추진하겠습니다.');
+            supportList = [];
+            updateUI();
+            hideSupportList();
         }
 
         window.addEventListener('scroll', () => {
