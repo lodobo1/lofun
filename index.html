@@ -34,6 +34,7 @@
             <h1 class="text-3xl font-black text-sky-100 tracking-tighter cursor-pointer drop-shadow-sm" onclick="location.reload()">우동만</h1>
             <nav class="hidden md:flex space-x-6 text-sm font-medium">
                 <a href="#" class="hover:text-gray-300 transition">홈</a>
+                <a href="#" class="hover:text-gray-300 transition" onclick="showCommunity()">커뮤니티</a>
                 <a href="#" class="hover:text-gray-300 transition" onclick="showStats()">지역별/카테고리별 지지 현황</a>
                 <a href="#" class="hover:text-gray-300 transition">내가 제안한 브랜드</a>
             </nav>
@@ -100,6 +101,36 @@
         </div>
     </main>
 
+    <!-- Community Modal -->
+    <div id="community-modal" class="fixed inset-0 bg-black/95 hidden flex items-center justify-center z-[100] p-4">
+        <div class="bg-[#181818] p-8 rounded-lg max-w-4xl w-full border border-gray-800 max-h-[90vh] overflow-y-auto relative">
+            <div class="flex justify-between items-center mb-8 sticky top-0 bg-[#181818] py-2 z-10">
+                <h3 class="text-3xl font-bold">동네 커뮤니티</h3>
+                <button onclick="hideCommunity()" class="text-3xl hover:text-sky-400 transition">&times;</button>
+            </div>
+            
+            <div id="disqus_thread" class="min-h-[400px]"></div>
+            <script>
+                /**
+                *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+                /*
+                var disqus_config = function () {
+                this.page.url = window.location.href;  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = 'community-page'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                };
+                */
+                (function() { // DON'T EDIT BELOW THIS LINE
+                var d = document, s = d.createElement('script');
+                s.src = 'https://bolodo1.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+    </div>
+
     <!-- Support Stats Modal -->
     <div id="stats-modal" class="fixed inset-0 bg-black/95 hidden flex items-center justify-center z-[100] p-4">
         <div class="bg-[#181818] p-8 rounded-lg max-w-4xl w-full border border-gray-800 max-h-[90vh] overflow-y-auto">
@@ -157,7 +188,7 @@
             { id: 203, name: '투썸플레이스', category: '국내 카페', goal: '2,000명', price: 15000, img: '🍰', type: 'cafe' },
             { id: 204, name: '폴바셋', category: '국내 카페', goal: '1,200명', price: 10000, img: '🍦', type: 'cafe' },
             { id: 205, name: '테라로사', category: '국내 카페', goal: '1,000명', price: 15000, img: '🍞', type: 'cafe' },
-            { id: 206, name: '런던베이글뮤지엄', category: '국내 카페', goal: '3,000명', price: 12000, img: ' bagel', type: 'cafe' },
+            { id: 206, name: '런던베이글뮤지엄', category: '국내 카페', goal: '3,000명', price: 12000, img: '🥯', type: 'cafe' },
             { id: 207, name: '팀홀튼', category: '해외 카페', goal: '1,800명', price: 8000, img: '🍩', type: 'cafe' },
             { id: 208, name: '응커피 (% Arabica)', category: '해외 카페', goal: '1,000명', price: 10000, img: '🥤', type: 'cafe' },
             { id: 209, name: '이디야', category: '국내 카페', goal: '4,000명', price: 5000, img: '🧊', type: 'cafe' },
@@ -355,6 +386,16 @@
                 header.classList.remove('bg-[#141414]', 'shadow-2xl');
             }
         });
+
+        function showCommunity() {
+            document.getElementById('community-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideCommunity() {
+            document.getElementById('community-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
 
         renderRows();
     </script>
